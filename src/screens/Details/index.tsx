@@ -10,6 +10,8 @@ import { Cover } from "@/components/Market/Cover";
 import { Coupon } from "@/components/Market/Coupon";
 import { DetailsMarket, PropsDetailsMarket } from "@/components/Market/Details";
 
+import { formatDate } from "@/utils/formatDateUseCoupon";
+
 import { api } from "@/services/api";
 
 import { styles } from "./styles";
@@ -27,7 +29,7 @@ export function Details() {
   const [isLoading, setIsLoading] = useState(true);
   const [couponIsFetching, setCouponIsFetching] = useState(false);
   const [isVisibleCameraModal, setIsVisibleCameraModal] = useState(false);
-
+  const [dateUseCoupon, setDateUseCoupon] = useState<string[]>([]);
 
   const route = useRoute();
   const { id, category } = route.params as ParamsRouter;
@@ -57,6 +59,7 @@ export function Details() {
   async function fetchMarket() {
     try {
       const { data } = await api.get(`/markets/${id}`);
+      setData(data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -76,12 +79,20 @@ export function Details() {
       const { data } = await api.patch("/coupons/" + id);
       Alert.alert("Cupom", data.coupon);
       setCoupon(data.coupon);
+      registerDateUseCoupon();
     } catch (error) {
       console.log(error);
       Alert.alert("Erro", "Não foi possível utilizar o cupom");
     } finally {
       setCouponIsFetching(false);
     }
+  }
+
+  function registerDateUseCoupon() {
+    // Gerar a data e hora no momento da atualização
+    const now = new Date();
+    const formattedDate = formatDate(now);
+    setDateUseCoupon(prev => [...prev, formattedDate]);
   }
 
   function handleUseCoupon(id: string) {
@@ -126,13 +137,13 @@ export function Details() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Cover uri={data.cover} />
 
-        <DetailsMarket data={data} iconId={category} />
+        <DetailsMarket data={data} iconId={category} date={dateUseCoupon} />
 
         {coupon && <Coupon code={coupon} />}
       </ScrollView>
 
       <View style={{ padding: 32 }}>
-        <Button onPress={handleOpenCamera}>
+        <Button onPress={handleOpenCamera} isLoading={data.coupons <= 0}>
           <Button.Icon library="MaterialCommunityIcons" name="line-scan" />
           <Button.Title>Ler QR Code</Button.Title>
         </Button>

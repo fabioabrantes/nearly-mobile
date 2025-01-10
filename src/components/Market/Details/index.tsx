@@ -23,9 +23,10 @@ export type PropsDetailsMarket = {
 type Props = {
   data: PropsDetailsMarket;
   iconId: string;
+  date: string[];
 }
 
-export function DetailsMarket({ data, iconId }: Props) {
+export function DetailsMarket({ data, iconId, date }: Props) {
   if (!iconId) return;
   const iconData = categoriesIcons[iconId];
 
@@ -39,8 +40,10 @@ export function DetailsMarket({ data, iconId }: Props) {
     <View style={styles.container}>
       <View style={styles.containerName}>
         <Text style={styles.name}>{data.name}</Text>
+
         <IconComponent name={iconData.name as any} size={24} color={colors.green.light} />
       </View>
+
       <Text style={styles.description}>{data.description}</Text>
 
       <Coupon amountCoupons={data.coupons} color={colors.red.base} />
@@ -75,6 +78,19 @@ export function DetailsMarket({ data, iconId }: Props) {
         </View>
       </View>
 
+      <View style={styles.group}>
+        <Text style={styles.title}>Cupons usados</Text>
+        {date.length > 0 && date.map(item =>
+          <View style={styles.containerInfo} key={item}>
+            <MaterialCommunityIcons
+              name="ticket-confirmation-outline"
+              size={16}
+              color={colors.green.light}
+            />
+            <Text style={styles.textDescription}>{item}</Text>
+          </View>
+        )}
+      </View>
     </View>
   )
 }
