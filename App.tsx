@@ -1,3 +1,4 @@
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts, Roboto_900Black, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, } from "@expo-google-fonts/roboto";
 
@@ -14,11 +15,13 @@ export default function App() {
   });
 
   return (
-    <NavigationContainer>
-      {
-        fontsLoaded ? <Routes /> : <Loading size="large" color={colors.green.base} />
-      }
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        {
+          fontsLoaded ? <Routes /> : <Loading size="large" color={colors.green.base} />
+        }
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

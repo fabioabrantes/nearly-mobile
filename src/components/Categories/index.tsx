@@ -1,4 +1,4 @@
-import { FlatList } from "react-native";
+import { FlatList, } from "react-native";
 
 import { Category } from "@/components/Categories/Category";
 

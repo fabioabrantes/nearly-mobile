@@ -3,7 +3,7 @@ export declare global {
     interface RootParamList {
       Dashboard: undefined;
       Home: undefined;
-      Details: undefined;
+      Details: { id: string, category: string };
     }
   }
 }

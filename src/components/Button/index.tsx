@@ -1,5 +1,5 @@
 import { TouchableOpacity, TouchableOpacityProps, Text, TextProps, } from "react-native";
-import { MaterialCommunityIcons, Feather, } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Feather,Ionicons } from "@expo/vector-icons";
 
 import { Loading } from "@/components/Loading";
 
@@ -47,11 +47,21 @@ type MaterialCommunityIconProps = {
   color?: string;
 };
 
-type IconProps = FeatherIconProps | MaterialCommunityIconProps;
+type IoniconsProps = {
+  library: "Ionicons";
+  name: React.ComponentProps<typeof Ionicons>["name"];
+  color?: string;
+  size?: number;
+};
 
-function Icon({ library, name, size = 24, color = colors.gray100 }: IconProps) {
+type IconProps = FeatherIconProps | MaterialCommunityIconProps | IoniconsProps;
+
+export function Icon({ library, name, size = 24, color = colors.gray100 }: IconProps) {
   if (library === "Feather") {
     return <Feather name={name} size={size} color={color} />;
+  }
+  if (library === "Ionicons") {
+    return <Ionicons name={name} size={size} color={color} />;
   }
   return <MaterialCommunityIcons name={name} size={size} color={color} />;
 }

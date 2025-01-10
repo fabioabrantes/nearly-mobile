@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { IconProps } from "phosphor-react-native";
+/* import { IconProps } from "phosphor-react-native"; */
 
 import { colors } from "@/styles/theme";
 
@@ -8,12 +8,12 @@ import { styles } from "./styles";
 type Props = {
   title: string;
   description: string;
-  icon: React.ComponentType<IconProps>;
+  /* icon: React.ComponentType<IconProps> ; */
 }
-export function Stage({ title, description, icon: Icon }: Props) {
+export function Stage({ title, description,/*  icon: Icon */ }: Props) {
   return (
     <View style={styles.container}>
-      {Icon && <Icon size={32} color={colors.red.base} />}
+      {/*  {Icon && <Icon size={32} color={colors.red.base} />} */}
 
       <View style={styles.details}>
         <Text style={styles.title}> {title} </Text>

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { View, Text, Alert } from "react-native";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import { useNavigation } from "@react-navigation/native";
+
 
 import { Categories, CategoriesProps } from "@/components/Categories";
+import { Places } from "@/components/Places";
 
 import pinMarker from '@/assets/pin.png';
 
@@ -35,6 +38,8 @@ export function Home() {
   const [category, setCategory] = useState("");
   const [markets, setMarkets] = useState<MarketsProps[]>([] as MarketsProps[]);
   const [currentLocation, setCurrentLocation] = useState<Coords | null>(null);
+
+  const navigation = useNavigation();
 
   async function getCurrentLocation() {
     try {
@@ -75,17 +80,18 @@ export function Home() {
     }
   }
 
+  function handleGoDetails(id: string, category: string) {
+    navigation.navigate("Details", { id, category });
+  }
+
   useEffect(() => {
     fetchCategories();
   }, []);
-
 
   useEffect(() => {
     getCurrentLocation();
     fetchMarkets();
   }, [category]);
-
-
 
   return (
     <View style={styles.container}>
@@ -107,7 +113,7 @@ export function Home() {
           showsUserLocation={true}
         >
           {
-            markets.map(market => (
+            markets.length > 0 && markets.map(market => (
               <Marker
                 key={market.id}
                 identifier={market.id}
@@ -116,10 +122,9 @@ export function Home() {
                   latitude: market.latitude,
                   longitude: market.longitude,
                 }}
-
               >
-                <Callout onPress={() => { }}>
-                  <View>
+                <Callout onPress={() => handleGoDetails(market.id, category)}>
+                  <View style={styles.ContainerCallout}>
                     <Text style={styles.NameCallout}>
                       {market.name}
                     </Text>
@@ -136,6 +141,9 @@ export function Home() {
       )
       }
 
+      {
+        markets.length > 0 && <Places data={markets} category={category} />
+      }
     </View>
   )
 }
